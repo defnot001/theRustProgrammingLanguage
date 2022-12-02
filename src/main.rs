@@ -1,3 +1,11 @@
+use std::io;
+
 fn main() {
-    println!("Hello, world!");
+    println!("Guess the number!");
+
+    println!("Please input your guess.");
+
+    let mut guess = String::new();
 }
+
+
