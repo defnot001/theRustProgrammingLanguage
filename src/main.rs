@@ -1,35 +1,19 @@
-use rand::Rng;
-use std::cmp::Ordering;
-use std::io;
+use std::fs;
+use std::path::Path;
 
 fn main() {
-    println!("Guess the number!");
+    let path = Path::new("src/assets/codes.txt");
 
-    let secret_number = rand::thread_rng().gen_range(1..=100);
+    let contents = fs::read_to_string(path).expect("Something went wrong reading the file");
 
-    loop {
-        println!("Please input your guess.");
+    let replaced = contents.replace( ":", "");
 
-        let mut guess = String::new();
+    let codes = replaced.split_whitespace();
 
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
-
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-
-        println!("You guessed: {guess}");
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
+    for code in codes {
+        match i64::from_str_radix(code, 16) {
+            Ok(value) => println!("{}", value),
+            Err(e) => println!("Error: {}", e)
         }
     }
 }
